@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 100" width="100%" height="100%">
+  <defs>
+    <!-- Premium Platinum/White Gradient for the Main Typography -->
+    <linearGradient id="evntro-clean-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#27272A" /> <!-- For light background, use dark colors -->
+      <stop offset="100%" stop-color="#09090B" />
+    </linearGradient>
+    
+    <!-- Sparkle/Event Star Gradient -->
+    <linearGradient id="sparkle-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D1A751" /> <!-- Premium Gold -->
+      <stop offset="100%" stop-color="#B48A3A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Typography Group (No background rect) -->
+  <g transform="translate(10, 65)">
+    <!-- 'e' -->
+    <text x="0" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">e</text>
+    
+    <!-- 'v' -->
+    <text x="36" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">v</text>
+    
+    <!-- 'n' -->
+    <text x="70" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">n</text>
+    
+    <!-- 't' (Slim & Gold accented) -->
+    <text x="108" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="300" fill="#D1A751" letter-spacing="-1">t</text>
+    
+    <!-- 'r' -->
+    <text x="130" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">r</text>
+    
+    <!-- 'o' -->
+    <text x="158" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B">o</text>
+    
+    <!-- The Global/Event Sparkle -->
+    <path d="M 180 -35 L 182.5 -25 L 192.5 -22.5 L 182.5 -20 L 180 -10 L 177.5 -20 L 167.5 -22.5 L 177.5 -25 Z" fill="url(#sparkle-grad)" />
+    
+    <!-- Elegant Tagline -->
+    <text x="2" y="24" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717A" letter-spacing="5.5">MOMENTS INTO MEMORIES</text>
+  </g>
+</svg>
