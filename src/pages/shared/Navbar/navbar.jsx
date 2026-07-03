@@ -53,7 +53,7 @@ const Navbar = () => {
                 <Link to="/login">Log in</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link to="/signup">Sign up</Link>
+                <Link to="/register">Register</Link>
               </Button>
             </>
           )}
@@ -107,8 +107,8 @@ const Navbar = () => {
                     </Link>
                   </Button>
                   <Button size="sm" asChild>
-                    <Link to="/signup" onClick={() => setIsOpen(false)}>
-                      Sign up
+                    <Link to="/register" onClick={() => setIsOpen(false)}>
+                      Register
                     </Link>
                   </Button>
                 </>
