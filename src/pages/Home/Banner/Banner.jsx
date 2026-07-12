@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 // Swiper React components & styles
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
@@ -8,7 +9,8 @@ import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
 const Banner = ({ searchQuery, setSearchQuery }) => {
-  // Unsplash থেকে মাল্টিপল প্রিমিয়াম ইমেজ লিংক
+  const containerRef = useRef(null);
+  
   const sliderImages = [
     "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop",
@@ -23,8 +25,41 @@ const Banner = ({ searchQuery, setSearchQuery }) => {
     }
   };
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Fade in and slide up text elements in a staggered order
+      gsap.fromTo(
+        ".animate-hero-item",
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.12, 
+          ease: "power3.out",
+          clearProps: "all"
+        }
+      );
+
+      // Fade in and scale up the image slider slightly
+      gsap.fromTo(
+        ".animate-hero-slider",
+        { opacity: 0, scale: 0.95 },
+        { 
+          opacity: 1, 
+          scale: 1, 
+          duration: 1, 
+          ease: "power2.out", 
+          delay: 0.2,
+          clearProps: "all"
+        }
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative overflow-hidden bg-background py-20 lg:py-28 border-b border-border/40 transition-colors duration-300">
+    <div ref={containerRef} className="relative overflow-hidden bg-background py-20 lg:py-28 border-b border-border/40 transition-colors duration-300">
       {/* Background Subtle Gradient Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,62,168,0.06),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(91,110,245,0.08),transparent_50%)]" />
 
@@ -34,22 +69,22 @@ const Banner = ({ searchQuery, setSearchQuery }) => {
           <div className="lg:col-span-7">
             <div className="max-w-xl">
               {/* Badge */}
-              <span className="inline-flex items-center rounded-full bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20 backdrop-blur-md mb-6 animate-pulse transition-all duration-300">
+              <span className="inline-flex items-center rounded-full bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20 backdrop-blur-md mb-6 animate-pulse transition-all duration-300 animate-hero-item">
                 Evntro Next-Gen Platform
               </span>
 
               {/* Main Heading */}
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl bg-clip-text">
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl bg-clip-text animate-hero-item">
                 Explore Premium Events
               </h1>
 
               {/* Description */}
-              <p className="mt-6 text-lg leading-8 text-muted-foreground font-sans">
+              <p className="mt-6 text-lg leading-8 text-muted-foreground font-sans animate-hero-item">
                 Discover the best classes, developer hackathons, live concerts, and premium conferences. Unlock your experience with seamless online registration.
               </p>
 
               {/* Modern Search Box */}
-              <form onSubmit={handleSearch} className="mt-10 max-w-md">
+              <form onSubmit={handleSearch} className="mt-10 max-w-md animate-hero-item">
                 <div className="relative flex items-center group">
                   {/* SVG Search Icon */}
                   <div className="absolute left-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200">
@@ -91,7 +126,7 @@ const Banner = ({ searchQuery, setSearchQuery }) => {
 
           {/* Right Column: Swiper Container */}
           <div className="lg:col-span-5 flex items-center justify-center lg:justify-end">
-            <div className="relative p-4 rounded-3xl bg-card border border-border/80 shadow-2xl backdrop-blur-md overflow-hidden max-w-[450px] w-full aspect-[4/5] transition-colors duration-300">
+            <div className="relative p-4 rounded-3xl bg-card border border-border/80 shadow-2xl backdrop-blur-md overflow-hidden max-w-[450px] w-full aspect-[4/5] transition-colors duration-300 animate-hero-slider">
               {/* Glowing Background Glow */}
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-primary to-accent opacity-15 dark:opacity-25 blur-xl transition-all duration-300"></div>
 
