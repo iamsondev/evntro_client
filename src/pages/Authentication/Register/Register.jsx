@@ -148,23 +148,23 @@ const Register = () => {
 
   return (
     <div
-      className={`w-full bg-white/70 dark:bg-[#121826]/60 backdrop-blur-xl rounded-3xl border border-slate-200/50 dark:border-white/[0.06] p-8 sm:p-10 shadow-2xl shadow-slate-200/20 dark:shadow-black/60 transition-all duration-700 ease-out transform ${
+      className={`w-full bg-card/90 backdrop-blur-xl rounded-3xl border border-border p-8 sm:p-10 shadow-2xl transition-all duration-700 ease-out transform ${
         mounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
     >
       <div className="mb-8">
-        <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Create Account
         </h2>
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-2 text-sm text-muted-foreground">
           Join the community and discover incredible events.
         </p>
       </div>
 
       {/* Error Alert */}
       {authError && (
-        <div className="mb-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs sm:text-sm font-semibold flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-red-500" />
+        <div className="mb-6 p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-xs sm:text-sm font-semibold flex items-center gap-2">
+          <span className="flex h-2 w-2 rounded-full bg-destructive animate-pulse" />
           {authError}
         </div>
       )}
@@ -172,11 +172,11 @@ const Register = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Avatar Upload */}
         <div className="flex flex-col items-center justify-center space-y-2 mb-2">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider pl-1 font-sans">
             Profile Picture
           </label>
           <div className="relative group">
-            <div className="w-24 h-24 rounded-full overflow-hidden border border-slate-250 dark:border-white/[0.08] bg-slate-50/50 dark:bg-white/[0.01] hover:border-violet-500 transition-colors flex items-center justify-center shadow-inner">
+            <div className="w-24 h-24 rounded-full overflow-hidden border border-border bg-background/50 hover:border-primary transition-colors flex items-center justify-center shadow-inner">
               {imagePreview ? (
                 <img
                   src={imagePreview}
@@ -184,7 +184,7 @@ const Register = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <UserCircle className="h-16 w-16 text-slate-350 dark:text-slate-650" />
+                <UserCircle className="h-16 w-16 text-muted-foreground" />
               )}
             </div>
 
@@ -204,14 +204,14 @@ const Register = () => {
               <button
                 type="button"
                 onClick={handleRemoveImage}
-                className="absolute -top-1 -right-1 p-1 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition-colors cursor-pointer"
+                className="absolute -top-1 -right-1 p-1 bg-destructive hover:bg-destructive/90 text-white rounded-full shadow-md transition-colors cursor-pointer"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
           {errors.avatar && (
-            <p className="text-xs font-medium text-red-500 mt-1">
+            <p className="text-xs font-medium text-destructive mt-1">
               {errors.avatar.message}
             </p>
           )}
@@ -219,25 +219,25 @@ const Register = () => {
 
         {/* Name Input */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider pl-1 font-sans">
             Full Name
           </label>
           <div className="relative flex items-center">
-            <User className="absolute left-4 h-4 w-4 text-slate-400 dark:text-slate-500" />
+            <User className="absolute left-4 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="John Doe"
               {...register("name")}
-              className={`w-full rounded-2xl border py-3.5 pl-12 pr-4 text-sm bg-slate-50/40 dark:bg-white/[0.01] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none transition-all duration-200
+              className={`w-full rounded-2xl border py-3.5 pl-12 pr-4 text-sm bg-background/50 text-foreground placeholder-muted-foreground/60 outline-none transition-all duration-200
                 ${
                   errors.name
-                    ? "border-red-500 focus:ring-4 focus:ring-red-500/10"
-                    : "border-slate-200 dark:border-white/[0.08] focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                    ? "border-destructive focus:ring-4 focus:ring-destructive/10"
+                    : "border-border focus:border-primary focus:ring-4 focus:ring-primary/10"
                 }`}
             />
           </div>
           {errors.name && (
-            <p className="text-xs font-medium text-red-500 mt-1 pl-1">
+            <p className="text-xs font-medium text-destructive mt-1 pl-1">
               {errors.name.message}
             </p>
           )}
@@ -245,25 +245,25 @@ const Register = () => {
 
         {/* Email Input */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider pl-1 font-sans">
             Email Address
           </label>
           <div className="relative flex items-center">
-            <Mail className="absolute left-4 h-4 w-4 text-slate-400 dark:text-slate-500" />
+            <Mail className="absolute left-4 h-4 w-4 text-muted-foreground" />
             <input
               type="email"
               placeholder="name@example.com"
               {...register("email")}
-              className={`w-full rounded-2xl border py-3.5 pl-12 pr-4 text-sm bg-slate-50/40 dark:bg-white/[0.01] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none transition-all duration-200
+              className={`w-full rounded-2xl border py-3.5 pl-12 pr-4 text-sm bg-background/50 text-foreground placeholder-muted-foreground/60 outline-none transition-all duration-200
                 ${
                   errors.email
-                    ? "border-red-500 focus:ring-4 focus:ring-red-500/10"
-                    : "border-slate-200 dark:border-white/[0.08] focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                    ? "border-destructive focus:ring-4 focus:ring-destructive/10"
+                    : "border-border focus:border-primary focus:ring-4 focus:ring-primary/10"
                 }`}
             />
           </div>
           {errors.email && (
-            <p className="text-xs font-medium text-red-500 mt-1 pl-1">
+            <p className="text-xs font-medium text-destructive mt-1 pl-1">
               {errors.email.message}
             </p>
           )}
@@ -271,26 +271,26 @@ const Register = () => {
 
         {/* Password Input */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider pl-1 font-sans">
             Password
           </label>
           <div className="relative flex items-center">
-            <Lock className="absolute left-4 h-4 w-4 text-slate-400 dark:text-slate-500" />
+            <Lock className="absolute left-4 h-4 w-4 text-muted-foreground" />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               {...register("password")}
-              className={`w-full rounded-2xl border py-3.5 pl-12 pr-12 text-sm bg-slate-50/40 dark:bg-white/[0.01] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 outline-none transition-all duration-200
+              className={`w-full rounded-2xl border py-3.5 pl-12 pr-12 text-sm bg-background/50 text-foreground placeholder-muted-foreground/60 outline-none transition-all duration-200
                 ${
                   errors.password
-                    ? "border-red-500 focus:ring-4 focus:ring-red-500/10"
-                    : "border-slate-200 dark:border-white/[0.08] focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10"
+                    ? "border-destructive focus:ring-4 focus:ring-destructive/10"
+                    : "border-border focus:border-primary focus:ring-4 focus:ring-primary/10"
                 }`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+              className="absolute right-4 text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer"
             >
               {showPassword ? (
                 <EyeOff className="h-4.5 w-4.5" />
@@ -300,7 +300,7 @@ const Register = () => {
             </button>
           </div>
           {errors.password && (
-            <p className="text-xs font-medium text-red-500 mt-1 pl-1">
+            <p className="text-xs font-medium text-destructive mt-1 pl-1">
               {errors.password.message}
             </p>
           )}
@@ -308,7 +308,7 @@ const Register = () => {
 
         {/* Role Selection Tabs */}
         <div className="space-y-2">
-          <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <label className="text-xs font-semibold text-foreground/80 uppercase tracking-wider pl-1 font-sans">
             Choose Account Type
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -318,8 +318,8 @@ const Register = () => {
               className={`flex items-center justify-center gap-2 p-3.5 rounded-2xl border text-sm font-semibold transition-all duration-200 cursor-pointer
                 ${
                   currentRole === "attendee"
-                    ? "border-violet-500 bg-violet-500/10 text-violet-600 dark:text-violet-400 shadow-md shadow-violet-500/5"
-                    : "border-slate-200 dark:border-white/[0.08] bg-slate-50/20 dark:bg-white/[0.01] text-slate-600 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-white/[0.02]"
+                    ? "border-primary bg-primary/10 text-primary shadow-sm shadow-primary/5"
+                    : "border-border bg-background/50 text-foreground hover:bg-secondary/40"
                 }`}
             >
               <UserCheck className="h-4.5 w-4.5" />
@@ -331,8 +331,8 @@ const Register = () => {
               className={`flex items-center justify-center gap-2 p-3.5 rounded-2xl border text-sm font-semibold transition-all duration-200 cursor-pointer
                 ${
                   currentRole === "organizer"
-                    ? "border-violet-500 bg-violet-500/10 text-violet-600 dark:text-violet-400 shadow-md shadow-violet-500/5"
-                    : "border-slate-200 dark:border-white/[0.08] bg-slate-50/20 dark:bg-white/[0.01] text-slate-600 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-white/[0.02]"
+                    ? "border-primary bg-primary/10 text-primary shadow-sm shadow-primary/5"
+                    : "border-border bg-background/50 text-foreground hover:bg-secondary/40"
                 }`}
             >
               <Briefcase className="h-4.5 w-4.5" />
@@ -345,10 +345,10 @@ const Register = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 py-3.5 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-600/20 dark:shadow-violet-600/10 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none mt-4 cursor-pointer"
+          className="w-full flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-primary/95 py-3.5 px-4 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/10 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none mt-4 cursor-pointer"
         >
           {isSubmitting ? (
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
           ) : (
             <>
               Register <ArrowRight className="h-4.5 w-4.5" />
@@ -357,11 +357,11 @@ const Register = () => {
         </button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+      <div className="mt-8 text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link
           to="/login"
-          className="font-bold text-violet-600 dark:text-violet-400 hover:text-violet-500 transition-colors"
+          className="font-bold text-primary hover:text-primary/80 transition-colors"
         >
           Login
         </Link>

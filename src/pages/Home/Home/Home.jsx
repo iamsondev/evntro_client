@@ -2,7 +2,7 @@ import Banner from "../Banner/Banner";
 
 const Home = () => {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "red" }}>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Banner />
     </div>
   );

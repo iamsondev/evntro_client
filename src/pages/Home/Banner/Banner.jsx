@@ -24,27 +24,27 @@ const Banner = () => {
   };
 
   return (
-    <div className="relative overflow-hidden bg-slate-950 py-20 lg:py-28">
+    <div className="relative overflow-hidden bg-background py-20 lg:py-28 border-b border-border/40 transition-colors duration-300">
       {/* Background Subtle Gradient Overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.08),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,62,168,0.06),transparent_50%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(91,110,245,0.08),transparent_50%)]" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-12 lg:items-center">
-          {/* Left Column: Content & Search Box (Takes 7 Cols on Large Screen) */}
+          {/* Left Column: Content & Search Box */}
           <div className="lg:col-span-7">
             <div className="max-w-xl">
               {/* Badge */}
-              <span className="inline-flex items-center rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400 ring-1 ring-inset ring-blue-500/30 backdrop-blur-md mb-6 animate-pulse">
+              <span className="inline-flex items-center rounded-full bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20 backdrop-blur-md mb-6 animate-pulse transition-all duration-300">
                 Next-Gen Platform
               </span>
 
               {/* Main Heading */}
-              <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl bg-clip-text">
                 Explore the Tech Frontier
               </h1>
 
               {/* Description */}
-              <p className="mt-6 text-lg leading-8 text-slate-400">
+              <p className="mt-6 text-lg leading-8 text-muted-foreground">
                 Find the best resources, developer tools, and cutting-edge
                 insights. Empower your workflow with automated pipelines and
                 dynamic architectures.
@@ -54,7 +54,7 @@ const Banner = () => {
               <form onSubmit={handleSearch} className="mt-10 max-w-md">
                 <div className="relative flex items-center group">
                   {/* SVG Search Icon */}
-                  <div className="absolute left-4 text-slate-400 group-focus-within:text-blue-500 transition-colors duration-200">
+                  <div className="absolute left-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200">
                     <svg
                       className="w-5 h-5"
                       fill="none"
@@ -76,13 +76,13 @@ const Banner = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search courses, projects or docs..."
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-32 py-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 backdrop-blur-md transition-all duration-300 shadow-inner"
+                    className="w-full bg-card border border-border rounded-2xl pl-12 pr-32 py-4 text-foreground placeholder-muted-foreground/80 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary backdrop-blur-md transition-all duration-300 shadow-sm"
                   />
 
                   {/* Search Button Inside Input */}
                   <button
                     type="submit"
-                    className="absolute right-2 top-2 bottom-2 px-5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl shadow-md shadow-blue-600/20 transition-all duration-200 active:scale-95"
+                    className="absolute right-2 top-2 bottom-2 px-5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm rounded-xl shadow-md transition-all duration-200 active:scale-95 cursor-pointer"
                   >
                     Search
                   </button>
@@ -91,11 +91,11 @@ const Banner = () => {
             </div>
           </div>
 
-          {/* Right Column: Swiper Container (Takes 5 Cols on Large Screen) */}
+          {/* Right Column: Swiper Container */}
           <div className="lg:col-span-5 flex items-center justify-center lg:justify-end">
-            <div className="relative p-4 rounded-3xl bg-white/5 border border-white/10 shadow-2xl backdrop-blur-md overflow-hidden max-w-[450px] w-full aspect-[4/5]">
+            <div className="relative p-4 rounded-3xl bg-card border border-border/80 shadow-2xl backdrop-blur-md overflow-hidden max-w-[450px] w-full aspect-[4/5] transition-colors duration-300">
               {/* Glowing Background Glow */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 to-indigo-600 opacity-20 blur-xl"></div>
+              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-primary to-accent opacity-15 dark:opacity-25 blur-xl transition-all duration-300"></div>
 
               {/* Swiper Slider */}
               <Swiper
@@ -120,8 +120,8 @@ const Banner = () => {
                       alt={`Slide ${index + 1}`}
                       className="object-cover w-full h-full transform scale-100 hover:scale-105 transition-transform duration-700 ease-out"
                     />
-                    {/* Image overlay to blend with dark theme */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+                    {/* Image overlay to blend with background theme */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent transition-all duration-300" />
                   </SwiperSlide>
                 ))}
               </Swiper>

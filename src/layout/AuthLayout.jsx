@@ -1,54 +1,72 @@
+import React from "react";
 import Logo from "@/components/Logo/Logo";
-import { Outlet } from "react-router";
+import { Outlet, Link } from "react-router";
+import { ArrowLeft, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
 
 const AuthLayout = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <div className="relative min-h-screen w-full flex flex-col lg:flex-row bg-slate-50 text-slate-900 dark:bg-[#0B0F19] dark:text-white transition-colors duration-300 overflow-x-hidden">
-      {/* 1. Animated Media Section */}
-      <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] lg:w-[50%] lg:h-screen flex flex-col justify-between p-6 sm:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-200/50 dark:border-white/[0.04] bg-slate-100/50 dark:bg-white/[0.01] backdrop-blur-3xl overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          className="absolute inset-0 w-full h-full object-cover opacity-60 dark:opacity-40 transition-opacity duration-300"
-        >
-          <source
-            src="https://media.istockphoto.com/id/1388514101/video/party-crowd-with-confetti-and-sparkles.mp4?s=mp4-640x640-is&k=20&c=K5x7FwM5N1U1F5C5R4H7Z4V_B0QG1G5J3Y1_Z4l1_Yw="
-            type="video/mp4"
-          />
-        </video>
-
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-
-        <div className="relative z-10 self-start p-2.5 sm:p-3 rounded-xl bg-transparent dark:bg-white/80 dark:backdrop-blur-md dark:shadow-md transition-all duration-300">
-          <Logo />
-        </div>
-
-        <div className="relative z-10 mt-auto lg:my-auto max-w-md">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight text-white lg:text-slate-900 lg:dark:text-white">
-            Dive into <br />
-            <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 dark:from-violet-400 dark:via-fuchsia-400 dark:to-cyan-400 bg-clip-text text-transparent">
-              Legendary Moments.
-            </span>
-          </h2>
-          <p className="mt-2 lg:mt-4 text-white/90 lg:text-slate-600 lg:dark:text-gray-300 text-xs sm:text-sm leading-relaxed max-w-sm">
-            From exclusive music festivals to tech summits, discover the events
-            that will shape your year. Secure your spot now.
-          </p>
-        </div>
-
-        <div className="hidden lg:block relative z-10 text-xs text-slate-400 dark:text-gray-500">
-          © 2026 EventApp. Join the Experience.
-        </div>
+    <div className="relative min-h-screen w-full flex flex-col justify-center items-center bg-background text-foreground transition-colors duration-305 overflow-hidden font-sans">
+      
+      {/* 1. Background Image from Unsplash with Slow Zoom Effect */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000"
+          alt="Event Background"
+          className="w-full h-full object-cover select-none pointer-events-none transform scale-105 transition-transform duration-[10000ms] ease-out brightness-[0.75] dark:brightness-[0.35]"
+        />
+        {/* Dynamic bright/dark gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-background/88 via-background/40 to-primary/10 dark:from-background dark:via-background/80 dark:to-primary/20 transition-all duration-300" />
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff01_1px,transparent_1px),linear-gradient(to_bottom,#ffffff01_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none opacity-40" />
       </div>
 
-      {/* 2. Auth Content Area */}
-      <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-8 md:px-12 lg:px-16 py-12 lg:py-24 relative z-10">
-        <div className="absolute top-[-10%] right-[-10%] h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] rounded-full bg-gradient-to-tr from-violet-600/10 to-fuchsia-600/10 blur-[100px] pointer-events-none hidden dark:block" />
-        <div className="absolute bottom-[-10%] left-[-10%] h-[300px] w-[300px] sm:h-[500px] sm:w-[500px] rounded-full bg-gradient-to-br from-cyan-500/10 to-blue-600/10 blur-[100px] pointer-events-none hidden dark:block" />
+      {/* 2. Floating Header & Navigation */}
+      <div className="absolute top-6 left-6 sm:left-10 z-20">
+        <Link
+          to="/"
+          className="block p-2 sm:p-2.5 rounded-2xl bg-card border border-border shadow-lg hover:opacity-95 transition-all duration-200 cursor-pointer"
+        >
+          <Logo />
+        </Link>
+      </div>
 
-        <div className="w-full max-w-[100%] sm:max-w-md transition-all duration-300">
+      {/* Floating Back to Home & Theme Toggle buttons */}
+      <div className="absolute top-6 right-6 sm:right-10 z-20 flex items-center gap-3">
+        <button
+          onClick={toggleTheme}
+          className="flex items-center justify-center p-2.5 sm:p-3 rounded-2xl bg-card border border-border text-foreground hover:bg-secondary/40 shadow-lg backdrop-blur-md transition-all duration-200 cursor-pointer"
+          aria-label="Toggle Theme"
+        >
+          {theme === "light" ? (
+            <Moon className="h-4 w-4 text-primary" />
+          ) : (
+            <Sun className="h-4 w-4 text-accent" />
+          )}
+        </button>
+        <Link
+          to="/"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground/80 hover:text-foreground transition-all duration-200 bg-card hover:bg-secondary/40 border border-border rounded-2xl py-2.5 px-4 shadow-lg backdrop-blur-md cursor-pointer"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back to Home
+        </Link>
+      </div>
+
+      {/* 3. Central Login/Register Card Container */}
+      <div className="relative z-10 w-full max-w-[90%] sm:max-w-md md:max-w-lg mt-24 mb-16 flex flex-col items-center">
+        <div className="w-full transition-all duration-300">
           <Outlet />
+        </div>
+
+        {/* Footnote */}
+        <div className="mt-8 text-center text-xs text-muted-foreground flex gap-4 justify-center relative z-10 font-semibold">
+          <a href="#privacy" className="hover:text-primary transition-colors">Privacy Policy</a>
+          <span>•</span>
+          <a href="#terms" className="hover:text-primary transition-colors">Terms of Service</a>
+          <span>•</span>
+          <a href="#help" className="hover:text-primary transition-colors">Help Centre</a>
         </div>
       </div>
     </div>
