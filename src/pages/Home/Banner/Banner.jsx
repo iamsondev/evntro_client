@@ -7,20 +7,20 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
-const Banner = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-
+const Banner = ({ searchQuery, setSearchQuery }) => {
   // Unsplash থেকে মাল্টিপল প্রিমিয়াম ইমেজ লিংক
   const sliderImages = [
-    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1200&auto=format&fit=crop",
   ];
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Searching for:", searchQuery);
-    // এখানে আপনার সার্চ লজিক বা ফিল্টারিং ফাংশন কল করতে পারেন
+    const eventListSection = document.getElementById("event-list-section");
+    if (eventListSection) {
+      eventListSection.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -35,19 +35,17 @@ const Banner = () => {
             <div className="max-w-xl">
               {/* Badge */}
               <span className="inline-flex items-center rounded-full bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20 backdrop-blur-md mb-6 animate-pulse transition-all duration-300">
-                Next-Gen Platform
+                Evntro Next-Gen Platform
               </span>
 
               {/* Main Heading */}
               <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-6xl bg-clip-text">
-                Explore the Tech Frontier
+                Explore Premium Events
               </h1>
 
               {/* Description */}
-              <p className="mt-6 text-lg leading-8 text-muted-foreground">
-                Find the best resources, developer tools, and cutting-edge
-                insights. Empower your workflow with automated pipelines and
-                dynamic architectures.
+              <p className="mt-6 text-lg leading-8 text-muted-foreground font-sans">
+                Discover the best classes, developer hackathons, live concerts, and premium conferences. Unlock your experience with seamless online registration.
               </p>
 
               {/* Modern Search Box */}
@@ -75,8 +73,8 @@ const Banner = () => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search courses, projects or docs..."
-                    className="w-full bg-card border border-border rounded-2xl pl-12 pr-32 py-4 text-foreground placeholder-muted-foreground/80 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary backdrop-blur-md transition-all duration-300 shadow-sm"
+                    placeholder="Search events, webinars, or concerts..."
+                    className="w-full bg-card border border-border rounded-2xl pl-12 pr-32 py-4 text-foreground placeholder-muted-foreground/80 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary backdrop-blur-md transition-all duration-305 shadow-sm"
                   />
 
                   {/* Search Button Inside Input */}
