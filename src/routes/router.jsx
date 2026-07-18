@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import AuthLayout from "@/layout/AuthLayout";
 import RootLayout from "@/layout/RootLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -10,9 +10,12 @@ import Register from "@/pages/Authentication/Register/Register";
 import EventsPage from "@/pages/Events/EventsPage";
 import EventDetailPage from "@/pages/Events/EventDetailPage";
 import CreateEventPage from "@/pages/Events/CreateEventPage";
-import MyRegistrationsPage from "@/pages/User/MyRegistrationsPage";
-import WishlistPage from "@/pages/User/WishlistPage";
-import MyEventsPage from "@/pages/User/MyEventsPage";
+import MyHubPage from "@/pages/User/MyHubPage";
+import PaymentSuccessPage from "@/pages/Events/PaymentSuccessPage";
+
+// Dashboard
+import DashboardLayout from "@/layout/DashboardLayout";
+import DashboardHome from "@/pages/Dashboard/DashboardHome";
 
 export const router = createBrowserRouter([
   // ── Public root (Navbar + Footer) ────────────────────────────────────────
@@ -25,6 +28,7 @@ export const router = createBrowserRouter([
       // Events – public
       { path: "events", Component: EventsPage },
       { path: "events/:id", Component: EventDetailPage },
+      { path: "payment-success", Component: PaymentSuccessPage },
 
       // Events – protected (organizer / admin only)
       {
@@ -36,30 +40,57 @@ export const router = createBrowserRouter([
         ),
       },
 
-      // User pages – any logged-in user
+      // Centralized hub portal route
       {
-        path: "my-registrations",
+        path: "my-portal",
         element: (
           <ProtectedRoute>
-            <MyRegistrationsPage />
+            <MyHubPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "my-registrations",
+        element: <Navigate to="/my-portal?tab=registrations" replace />,
       },
       {
         path: "wishlist",
-        element: (
-          <ProtectedRoute>
-            <WishlistPage />
-          </ProtectedRoute>
-        ),
+        element: <Navigate to="/my-portal?tab=wishlist" replace />,
       },
-
-      // Organizer pages
       {
         path: "my-events",
+        element: <Navigate to="/my-portal?tab=events" replace />,
+      },
+    ],
+  },
+
+  // ── Dashboard layout (Sidebar + Role-based views) ──────────────────────────
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, Component: DashboardHome },
+      {
+        path: "registrations",
+        element: <Navigate to="/my-portal?tab=registrations" replace />,
+      },
+      {
+        path: "wishlist",
+        element: <Navigate to="/my-portal?tab=wishlist" replace />,
+      },
+      {
+        path: "events",
+        element: <Navigate to="/my-portal?tab=events" replace />,
+      },
+      {
+        path: "create-event",
         element: (
           <ProtectedRoute roles={["organizer", "admin"]}>
-            <MyEventsPage />
+            <CreateEventPage />
           </ProtectedRoute>
         ),
       },
@@ -76,3 +107,4 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+
