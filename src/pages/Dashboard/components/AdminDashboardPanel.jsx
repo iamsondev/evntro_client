@@ -8,12 +8,10 @@ import {
   Layers,
   Loader2,
   Inbox,
-  AlertCircle,
   Trash2,
   Plus,
   Tag,
   BarChart3,
-  CheckCircle2
 } from "lucide-react";
 
 const formatDate = (d) => new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -148,21 +146,6 @@ const AdminDashboardPanel = () => {
         </div>
       </div>
 
-      {/* Dynamic Status / Feedback Banners */}
-      {successMsg && (
-        <div className="rounded-2xl bg-green-500/10 border border-green-500/20 text-green-500 p-4 text-sm font-semibold flex items-center gap-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
-          <CheckCircle2 className="h-5 w-5 shrink-0" /> {successMsg}
-        </div>
-      )}
-
-      {error && (
-        <div className="rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive p-4 text-sm font-semibold flex items-center justify-between gap-2.5 animate-in fade-in duration-200">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 shrink-0" /> {error}
-          </div>
-          <button onClick={() => setError(null)} className="text-xs hover:underline cursor-pointer">Dismiss</button>
-        </div>
-      )}
 
       {/* Admin Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
