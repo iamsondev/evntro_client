@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, Link } from "react-router";
+import { GoogleLogin } from "@react-oauth/google";
+import axiosInstance from "@/api/axiosInstance";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
@@ -44,14 +46,14 @@ const registerSchema = z.object({
   role: z.enum(["attendee", "organizer"]).default("attendee"),
   avatar: z
     .any()
-    .refine((files) => files?.length === 1, "Profile picture is required")
+    .optional()
     .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      "Max image size is 2MB.",
+      (files) => !files || files.length === 0 || files?.[0]?.size <= MAX_FILE_SIZE,
+      "Max image size is 2MB."
     )
     .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported.",
+      (files) => !files || files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),
 });
 
@@ -59,15 +61,19 @@ const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [imagePreview, setImagePreview] = React.useState(null);
   const [mounted, setMounted] = React.useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
   
-  const { register: authRegister, authError, setAuthError } = useAuth();
+  const { user, register: authRegister, login, authError, setAuthError } = useAuth();
   const navigate = useNavigate();
-
+ 
   React.useEffect(() => {
     setMounted(true);
     setAuthError(null);
+    if (user) {
+      navigate("/dashboard");
+    }
     return () => setAuthError(null);
-  }, [setAuthError]);
+  }, [setAuthError, user, navigate]);
 
   const {
     register,
@@ -139,7 +145,7 @@ const Register = () => {
       // Backend registration action call
       const res = await authRegister(data.name, data.email, data.password, avatarUrl, data.role);
       if (res.success) {
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (error) {
       setAuthError(error.message || "Registration failed");
@@ -148,10 +154,16 @@ const Register = () => {
 
   return (
     <div
-      className={`w-full bg-card/90 backdrop-blur-xl rounded-3xl border border-border p-8 sm:p-10 shadow-2xl transition-all duration-700 ease-out transform ${
+      className={`relative w-full bg-card/90 backdrop-blur-xl rounded-3xl border border-border p-8 sm:p-10 shadow-2xl transition-all duration-700 ease-out transform ${
         mounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
     >
+      {isGoogleLoading && (
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 rounded-3xl flex flex-col items-center justify-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm font-semibold text-foreground">Verifying Google Account...</p>
+        </div>
+      )}
       <div className="mb-8">
         <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
           Create Account
@@ -356,6 +368,55 @@ const Register = () => {
           )}
         </button>
       </form>
+
+      {/* Divider */}
+      <div className="relative my-6 flex items-center justify-center gap-3">
+        <div className="flex-1 h-[1px] bg-border" />
+        <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          Or Continue With
+        </span>
+        <div className="flex-1 h-[1px] bg-border" />
+      </div>
+
+      {/* Social Logins */}
+      <div className="flex flex-col gap-3.5 justify-center items-center">
+        <div className="w-full flex justify-center [&>iframe]:!w-full [&>div]:!w-full">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                setAuthError(null);
+                setIsGoogleLoading(true);
+                const response = await axiosInstance.post("/auth/google", {
+                  credential: credentialResponse.credential,
+                  role: currentRole,
+                });
+                if (response.data) {
+                  await login(response.data);
+                  navigate("/dashboard");
+                }
+              } catch (error) {
+                console.error("Google login backend error:", error);
+                const errMsg =
+                  error.response?.data?.msg ||
+                  error.response?.data?.message ||
+                  "Google authorization failed";
+                setAuthError(errMsg);
+              } finally {
+                setIsGoogleLoading(false);
+              }
+            }}
+            onError={() => {
+              console.error("Google authentication failed");
+              setIsGoogleLoading(false);
+              setAuthError("Google login failed. Please try again.");
+            }}
+            theme="outline"
+            shape="rectangular"
+            size="large"
+            width="100%"
+          />
+        </div>
+      </div>
 
       <div className="mt-8 text-center text-sm text-muted-foreground">
         Already have an account?{" "}

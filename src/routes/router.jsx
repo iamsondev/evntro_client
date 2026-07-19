@@ -12,6 +12,9 @@ import EventDetailPage from "@/pages/Events/EventDetailPage";
 import CreateEventPage from "@/pages/Events/CreateEventPage";
 import MyHubPage from "@/pages/User/MyHubPage";
 import PaymentSuccessPage from "@/pages/Events/PaymentSuccessPage";
+import NotFoundPage from "@/pages/Error/NotFoundPage";
+import AboutPage from "@/pages/About/AboutPage";
+import ContactPage from "@/pages/Contact/ContactPage";
 
 // Dashboard
 import DashboardLayout from "@/layout/DashboardLayout";
@@ -24,6 +27,10 @@ export const router = createBrowserRouter([
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
+
+      // Public pages
+      { path: "about", Component: AboutPage },
+      { path: "contact", Component: ContactPage },
 
       // Events – public
       { path: "events", Component: EventsPage },
@@ -61,6 +68,9 @@ export const router = createBrowserRouter([
         path: "my-events",
         element: <Navigate to="/my-portal?tab=events" replace />,
       },
+
+      // Catch-all 404 (inside RootLayout keeps Navbar+Footer)
+      { path: "*", Component: NotFoundPage },
     ],
   },
 

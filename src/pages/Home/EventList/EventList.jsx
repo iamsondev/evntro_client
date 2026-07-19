@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router";
 import axiosInstance from "@/api/axiosInstance";
 import {
   MapPin,
@@ -333,7 +334,7 @@ const EventList = ({ searchQuery, setSearchQuery, selectedCategory, setSelectedC
                 className="group relative rounded-3xl border border-border/80 bg-card overflow-hidden shadow-md hover:shadow-xl hover:border-primary/25 transition-all duration-300 flex flex-col"
               >
                 {/* Banner Image */}
-                <div className="relative aspect-video w-full overflow-hidden bg-muted">
+                <Link to={`/events/${event._id}`} className="block relative aspect-video w-full overflow-hidden bg-muted group">
                   <img
                     src={event.banner || "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1200"}
                     alt={event.title}
@@ -346,14 +347,16 @@ const EventList = ({ searchQuery, setSearchQuery, selectedCategory, setSelectedC
                   <span className="absolute top-4 left-4 inline-flex items-center rounded-xl bg-background/88 backdrop-blur-md px-3.5 py-1 text-xs font-bold text-primary border border-border shadow-sm">
                     {event.category}
                   </span>
-                </div>
+                </Link>
 
                 {/* Content */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xl font-bold text-foreground line-clamp-1 group-hover:text-primary transition-colors mb-2">
-                      {event.title}
-                    </h3>
+                    <Link to={`/events/${event._id}`}>
+                      <h3 className="text-xl font-bold text-foreground line-clamp-1 hover:text-primary transition-colors mb-2">
+                        {event.title}
+                      </h3>
+                    </Link>
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-5">
                       {event.description}
                     </p>
@@ -384,13 +387,23 @@ const EventList = ({ searchQuery, setSearchQuery, selectedCategory, setSelectedC
                       </div>
                       <span className="font-bold text-foreground">{event.capacity} seats</span>
                     </div>
+
+                    {/* Price/Admission */}
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border/40">
+                      <span className="font-semibold">Admission</span>
+                      <span className="font-bold text-foreground bg-primary/5 px-2 py-0.5 rounded border border-primary/10 text-[10px]">
+                        {(event.isFree ?? true) ? "Free" : `৳ ${event.price?.toLocaleString() || 0}`}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Buy/View Ticket Link */}
                   <div className="mt-6">
-                    <button className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary hover:text-primary-foreground text-primary font-bold text-sm shadow-sm transition-all duration-300 cursor-pointer">
-                      View Event Details
-                    </button>
+                    <Link to={`/events/${event._id}`} className="block">
+                      <button className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary hover:text-primary-foreground text-primary font-bold text-sm shadow-sm transition-all duration-300 cursor-pointer">
+                        View Event Details
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </article>

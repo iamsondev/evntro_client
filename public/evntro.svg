@@ -1,42 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 100" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="100%" height="100%">
   <defs>
-    <!-- Premium Platinum/White Gradient for the Main Typography -->
-    <linearGradient id="evntro-clean-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#27272A" /> <!-- For light background, use dark colors -->
-      <stop offset="100%" stop-color="#09090B" />
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--logo-stop-1)" />
+      <stop offset="50%" stop-color="var(--logo-stop-2)" />
+      <stop offset="100%" stop-color="var(--logo-stop-3)" />
     </linearGradient>
-    
-    <!-- Sparkle/Event Star Gradient -->
-    <linearGradient id="sparkle-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#D1A751" /> <!-- Premium Gold -->
-      <stop offset="100%" stop-color="#B48A3A" />
+    <linearGradient id="spark-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="var(--logo-spark-1)" />
+      <stop offset="100%" stop-color="var(--logo-spark-2)" />
     </linearGradient>
   </defs>
 
-  <!-- Typography Group (No background rect) -->
-  <g transform="translate(10, 65)">
-    <!-- 'e' -->
-    <text x="0" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">e</text>
-    
-    <!-- 'v' -->
-    <text x="36" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">v</text>
-    
-    <!-- 'n' -->
-    <text x="70" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">n</text>
-    
-    <!-- 't' (Slim & Gold accented) -->
-    <text x="108" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="300" fill="#D1A751" letter-spacing="-1">t</text>
-    
-    <!-- 'r' -->
-    <text x="130" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B" letter-spacing="-2">r</text>
-    
-    <!-- 'o' -->
-    <text x="158" y="0" font-family="'Montserrat', 'Helvetica Neue', sans-serif" font-size="54" font-weight="800" fill="#09090B">o</text>
-    
-    <!-- The Global/Event Sparkle -->
-    <path d="M 180 -35 L 182.5 -25 L 192.5 -22.5 L 182.5 -20 L 180 -10 L 177.5 -20 L 167.5 -22.5 L 177.5 -25 Z" fill="url(#sparkle-grad)" />
-    
-    <!-- Elegant Tagline -->
-    <text x="2" y="24" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#71717A" letter-spacing="5.5">MOMENTS INTO MEMORIES</text>
+  <style>
+    .logo-container {
+      --logo-stop-1: #4F46E5;
+      --logo-stop-2: #1D4ED8;
+      --logo-stop-3: #0F766E;
+      --logo-spark-1: #D97706;
+      --logo-spark-2: #DC2626;
+      --logo-txt-1: #0F172A;
+      --logo-txt-2: #3730A3;
+      --logo-txt-3: #475569;
+      --logo-accent: #0D9488;
+    }
+    @media (prefers-color-scheme: dark) {
+      .logo-container {
+        --logo-stop-1: #6366F1;
+        --logo-stop-2: #3B82F6;
+        --logo-stop-3: #22D3EE;
+        --logo-spark-1: #F59E0B;
+        --logo-spark-2: #EC4899;
+        --logo-txt-1: #F8FAFC;
+        --logo-txt-2: #818CF8;
+        --logo-txt-3: #94A3B8;
+        --logo-accent: #06B6D4;
+      }
+    }
+    .text-p1 { fill: var(--logo-txt-1); transition: fill 0.3s ease; }
+    .text-p2 { fill: var(--logo-txt-2); transition: fill 0.3s ease; }
+    .text-sub { fill: var(--logo-txt-3); transition: fill 0.3s ease; }
+    .circle-acc { fill: var(--logo-accent); transition: fill 0.3s ease; }
+  </style>
+
+  <g class="logo-container" transform="translate(10, 5)">
+    <!-- Event Prism Emblem (Interlocking Stage Circles & Star Node) -->
+    <g transform="translate(5, 5)">
+      <!-- Outer Track Segment -->
+      <path d="M 40 10 A 25 25 0 1 1 15 35" fill="none" stroke="url(#logo-gradient)" stroke-width="4.5" stroke-linecap="round" />
+      <path d="M 15 35 A 25 25 0 0 1 35 12" fill="none" stroke="url(#logo-gradient)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="2 10" />
+      
+      <!-- Inner Stage Ring -->
+      <circle cx="40" cy="35" r="16" fill="none" stroke="url(#logo-gradient)" stroke-width="3" stroke-dasharray="40 20" transform="rotate(-45 40 35)" />
+      
+      <!-- Center Star/Spark -->
+      <path d="M 40 23 L 42.5 31.5 L 51 34 L 42.5 36.5 L 40 45 L 37.5 36.5 L 29 34 L 37.5 31.5 Z" fill="url(#spark-gradient)" />
+      <circle cx="40" cy="34" r="2.5" fill="#FFFFFF" />
+    </g>
+
+    <!-- Typography/Wordmark Group -->
+    <g transform="translate(75, 48)">
+      <text x="0" y="0" class="text-p1" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" letter-spacing="-1.5">Evn</text>
+      <text x="78" y="0" class="text-p2" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="900" letter-spacing="-1.5">tro</text>
+      <circle cx="145" cy="-8" r="6" class="circle-acc" />
+      <text x="2" y="18" class="text-sub" font-family="system-ui, -apple-system, sans-serif" font-size="8" font-weight="700" letter-spacing="5">MOMENTS INTO MEMORIES</text>
+    </g>
   </g>
 </svg>

@@ -1,0 +1,10 @@
+node_modules/
+.next/
+build/
+dist/
+.env
+.env.local
+.env.production
+.env.example
+.antigravityignore
+.gitignore

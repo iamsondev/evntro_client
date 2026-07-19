@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
-import { Menu, X, Sun, Moon, User, ChevronDown, Plus, CalendarDays, Heart, LogOut } from "lucide-react";
+import { Menu, X, Sun, Moon, User, ChevronDown, Plus, CalendarDays, Heart, LogOut, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo/Logo";
 import { useTheme } from "@/context/ThemeContext";
@@ -63,9 +63,11 @@ const Navbar = () => {
         {/* Desktop nav links */}
         <nav className="hidden md:flex md:items-center md:gap-7">
           <NavLink to="/events" className={linkCls}>Browse Events</NavLink>
-          {user && <NavLink to="/my-registrations" className={linkCls}>My Registrations</NavLink>}
-          {user && <NavLink to="/wishlist" className={linkCls}>Wishlist</NavLink>}
-          {isOrganizer && <NavLink to="/my-events" className={linkCls}>My Events</NavLink>}
+          <NavLink to="/about" className={linkCls}>About</NavLink>
+          <NavLink to="/contact" className={linkCls}>Contact</NavLink>
+          {user && <NavLink to="/my-portal?tab=registrations" className={linkCls}>My Registrations</NavLink>}
+          {user && <NavLink to="/my-portal?tab=wishlist" className={linkCls}>Wishlist</NavLink>}
+          {isOrganizer && <NavLink to="/my-portal?tab=events" className={linkCls}>My Events</NavLink>}
         </nav>
 
         {/* Desktop right side */}
@@ -88,9 +90,28 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setProfileOpen((p) => !p)}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary/40 border border-border transition-all cursor-pointer"
+                className="flex items-center gap-2 px-2 py-1.5 rounded-xl text-sm font-semibold text-foreground hover:bg-secondary/40 border border-border transition-all cursor-pointer"
               >
-                <User className="h-4 w-4 text-primary" />
+                <div className="h-7 w-7 rounded-lg border border-primary/20 overflow-hidden shrink-0 relative flex items-center justify-center">
+                  {user?.avatar ? (
+                    <img 
+                      src={user.avatar} 
+                      alt={user.name} 
+                      className="h-full w-full object-cover" 
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallbackElem = e.target.nextSibling;
+                        if (fallbackElem) fallbackElem.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className="h-full w-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase text-xs"
+                    style={{ display: user?.avatar ? 'none' : 'flex' }}
+                  >
+                    {user?.name?.slice(0, 2) || <User className="h-3.5 w-3.5" />}
+                  </div>
+                </div>
                 <span className="max-w-[100px] truncate">{user.name || user.email}</span>
                 <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${profileOpen ? "rotate-180" : ""}`} />
               </button>
@@ -103,6 +124,10 @@ const Navbar = () => {
                     <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary">{user.role}</span>
                   </div>
                   <div className="py-1">
+                    <Link to="/dashboard" onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-secondary/40 transition-colors">
+                      <LayoutDashboard className="h-4 w-4 text-primary" /> Dashboard
+                    </Link>
                     {isOrganizer && (
                       <Link to="/events/create" onClick={() => setProfileOpen(false)}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-secondary/40 transition-colors">
@@ -110,16 +135,16 @@ const Navbar = () => {
                       </Link>
                     )}
                     {isOrganizer && (
-                      <Link to="/my-events" onClick={() => setProfileOpen(false)}
+                      <Link to="/my-portal?tab=events" onClick={() => setProfileOpen(false)}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-secondary/40 transition-colors">
                         <CalendarDays className="h-4 w-4 text-accent" /> My Events
                       </Link>
                     )}
-                    <Link to="/my-registrations" onClick={() => setProfileOpen(false)}
+                    <Link to="/my-portal?tab=registrations" onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-secondary/40 transition-colors">
                       <CalendarDays className="h-4 w-4 text-accent" /> My Registrations
                     </Link>
-                    <Link to="/wishlist" onClick={() => setProfileOpen(false)}
+                    <Link to="/my-portal?tab=wishlist" onClick={() => setProfileOpen(false)}
                       className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-secondary/40 transition-colors">
                       <Heart className="h-4 w-4 text-accent" /> Wishlist
                     </Link>
@@ -167,21 +192,35 @@ const Navbar = () => {
               className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
               Browse Events
             </NavLink>
+            <NavLink to="/about" onClick={() => setIsOpen(false)}
+              className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
+              About
+            </NavLink>
+            <NavLink to="/contact" onClick={() => setIsOpen(false)}
+              className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
+              Contact
+            </NavLink>
 
             {user && (
-              <NavLink to="/my-registrations" onClick={() => setIsOpen(false)}
+              <NavLink to="/dashboard" onClick={() => setIsOpen(false)}
+                className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
+                Dashboard
+              </NavLink>
+            )}
+            {user && (
+              <NavLink to="/my-portal?tab=registrations" onClick={() => setIsOpen(false)}
                 className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
                 My Registrations
               </NavLink>
             )}
             {user && (
-              <NavLink to="/wishlist" onClick={() => setIsOpen(false)}
+              <NavLink to="/my-portal?tab=wishlist" onClick={() => setIsOpen(false)}
                 className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
                 Wishlist
               </NavLink>
             )}
             {isOrganizer && (
-              <NavLink to="/my-events" onClick={() => setIsOpen(false)}
+              <NavLink to="/my-portal?tab=events" onClick={() => setIsOpen(false)}
                 className={({ isActive }) => `block rounded-xl px-3 py-2.5 text-sm font-semibold ${isActive ? "bg-secondary/40 text-primary" : "text-muted-foreground hover:bg-secondary/20"}`}>
                 My Events
               </NavLink>

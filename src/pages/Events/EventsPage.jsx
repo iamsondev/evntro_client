@@ -264,16 +264,16 @@ const EventsPage = () => {
           {/* Search button */}
           <button
             onClick={() => { applyFilter("search", searchInput); applyFilter("location", locationInput); }}
-            className="px-6 py-3 bg-primary text-primary-foreground font-bold text-sm rounded-2xl hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer"
+            className="w-full lg:w-auto px-6 py-3 bg-primary text-primary-foreground font-bold text-sm rounded-2xl hover:bg-primary/90 transition-all shadow-md shadow-primary/10 cursor-pointer"
           >
             Search
           </button>
           {hasFilters && (
             <button
               onClick={clearAll}
-              className="flex items-center gap-1.5 px-4 py-3 text-xs font-bold text-accent border border-accent/20 bg-accent/5 hover:bg-accent/10 rounded-2xl transition-colors cursor-pointer"
+              className="w-full lg:w-auto flex items-center justify-center gap-1.5 px-4 py-3 text-xs font-bold text-accent border border-accent/20 bg-accent/5 hover:bg-accent/10 rounded-2xl transition-colors cursor-pointer"
             >
-              <X className="h-3.5 w-3.5" /> Clear
+              <X className="h-3.5 w-3.5" /> Clear All Filters
             </button>
           )}
         </div>

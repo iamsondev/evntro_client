@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Mail, Phone, MapPin, ArrowRight, CheckCircle } from "lucide-react";
 import { FaLinkedin, FaGithub, FaFacebook } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import Logo from "@/components/Logo/logo";
+import Logo from "@/components/Logo/Logo";
 
 const FOOTER_LINKS = {
   Product: [

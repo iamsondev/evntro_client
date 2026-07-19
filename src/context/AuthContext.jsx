@@ -28,6 +28,10 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setAuthError(null);
     try {
+      if (email && typeof email === 'object') {
+        setUser(email);
+        return { success: true, user: email };
+      }
       const response = await axiosInstance.post('/auth/login', { email, password });
       const userData = response.data; // response contains { id, email, role }
       setUser(userData);

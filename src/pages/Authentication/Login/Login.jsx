@@ -5,6 +5,8 @@ import * as z from "zod";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, Link } from "react-router";
+import { GoogleLogin } from "@react-oauth/google";
+import axiosInstance from "@/api/axiosInstance";
 
 // Validation Schema using Zod
 const loginSchema = z.object({
@@ -15,14 +17,18 @@ const loginSchema = z.object({
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
-  const { login, authError, setAuthError } = useAuth();
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState(false);
+  const { user, login, authError, setAuthError } = useAuth();
   const navigate = useNavigate();
 
   React.useEffect(() => {
     setMounted(true);
     setAuthError(null);
+    if (user) {
+      navigate("/dashboard");
+    }
     return () => setAuthError(null);
-  }, [setAuthError]);
+  }, [setAuthError, user, navigate]);
 
   const {
     register,
@@ -39,16 +45,22 @@ const Login = () => {
   const onSubmit = async (data) => {
     const response = await login(data.email, data.password);
     if (response.success) {
-      navigate("/");
+      navigate("/dashboard");
     }
   };
 
   return (
     <div
-      className={`w-full bg-card/90 backdrop-blur-xl rounded-3xl border border-border p-8 sm:p-10 shadow-2xl transition-all duration-700 ease-out transform ${
+      className={`relative w-full bg-card/90 backdrop-blur-xl rounded-3xl border border-border p-8 sm:p-10 shadow-2xl transition-all duration-700 ease-out transform ${
         mounted ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
     >
+      {isGoogleLoading && (
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 rounded-3xl flex flex-col items-center justify-center gap-3">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-sm font-semibold text-foreground">Verifying Google Account...</p>
+        </div>
+      )}
       {/* Header */}
       <div className="mb-8">
         <h2 className="text-3xl font-extrabold tracking-tight text-foreground">
@@ -166,25 +178,42 @@ const Login = () => {
       </div>
 
       {/* Social Logins */}
-      <div className="grid grid-cols-2 gap-4">
-        <button
-          type="button"
-          className="flex items-center justify-center gap-2.5 rounded-2xl border border-border bg-background/50 hover:bg-secondary/40 py-3 text-sm font-semibold text-foreground transition-colors cursor-pointer"
-        >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-5.136 4.114-3.555 0-6.44-2.885-6.44-6.44s2.885-6.44 6.44-6.44c1.633 0 3.12.607 4.269 1.603l3.24-3.24C19.23 2.14 15.938 1 12.24 1 5.48 1 0 6.48 0 13.24s5.48 12.24 12.24 12.24c6.76 0 12.24-5.48 12.24-12.24 0-.822-.093-1.614-.265-2.285h-11.98z" />
-          </svg>
-          Google
-        </button>
-        <button
-          type="button"
-          className="flex items-center justify-center gap-2.5 rounded-2xl border border-border bg-background/50 hover:bg-secondary/40 py-3 text-sm font-semibold text-foreground transition-colors cursor-pointer"
-        >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
-          </svg>
-          GitHub
-        </button>
+      <div className="flex flex-col gap-3.5 justify-center items-center">
+        <div className="w-full flex justify-center [&>iframe]:!w-full [&>div]:!w-full">
+          <GoogleLogin
+            onSuccess={async (credentialResponse) => {
+              try {
+                setAuthError(null);
+                setIsGoogleLoading(true);
+                const response = await axiosInstance.post("/auth/google", {
+                  credential: credentialResponse.credential,
+                });
+                if (response.data) {
+                  await login(response.data);
+                  navigate("/dashboard");
+                }
+              } catch (error) {
+                console.error("Google login backend error:", error);
+                const errMsg =
+                  error.response?.data?.msg ||
+                  error.response?.data?.message ||
+                  "Google authorization failed";
+                setAuthError(errMsg);
+              } finally {
+                setIsGoogleLoading(false);
+              }
+            }}
+            onError={() => {
+              console.error("Google authentication failed");
+              setIsGoogleLoading(false);
+              setAuthError("Google login failed. Please try again.");
+            }}
+            theme="outline"
+            shape="rectangular"
+            size="large"
+            width="100%"
+          />
+        </div>
       </div>
 
       {/* Footer link */}

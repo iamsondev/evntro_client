@@ -148,7 +148,7 @@ const EventDetailPage = () => {
       setMessage({
         type: "error",
         text:
-          err.response?.data?.msg || err.message || "Registration failed. Please try again.",
+          err.response?.data?.message || err.response?.data?.msg || err.message || "Registration failed. Please try again.",
       });
     } finally {
       setRegisterLoading(false);
