@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "@/api/axiosInstance";
+import { toast } from "sonner";
 import {
   ShieldAlert,
   Users,
@@ -18,23 +19,18 @@ import {
 const formatDate = (d) => new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
 const AdminDashboardPanel = () => {
-  const [activeTab, setActiveTab] = useState("events"); // "events" | "categories"
+  const [activeTab, setActiveTab] = useState("events");
   
   const [metrics, setMetrics] = useState({ users: 142, events: 45, registrations: 348 });
   const [events, setEvents] = useState([]);
   const [categories, setCategories] = useState([]);
   
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [successMsg, setSuccessMsg] = useState(null);
-  
-  // Category Creation Form state
-  const [newCat, setNewCat] = useState({ name: "", description: "", icon: "Tag" });
   const [createLoading, setCreateLoading] = useState(false);
+  const [newCat, setNewCat] = useState({ name: "", description: "", icon: "Tag" });
 
   const fetchAdminData = async () => {
     try {
-      setError(null);
       const [eventsRes, catRes] = await Promise.all([
         axiosInstance.get("/events").catch(() => ({ data: { events: [] } })),
         axiosInstance.get("/categories").catch(() => ({ data: { categories: [] } }))
@@ -45,15 +41,13 @@ const AdminDashboardPanel = () => {
       
       setEvents(eventList);
       setCategories(catList);
-      
-      // Calculate dynamic mock metrics based on actual records
       setMetrics({
         users: 84, 
         events: eventList.length, 
         registrations: eventList.reduce((sum, item) => sum + (item.registeredCount || 0), 0) + 76
       });
-    } catch (err) {
-      setError("Failed to fetch system telemetry.");
+    } catch {
+      toast.error("Failed to fetch system telemetry.");
     } finally {
       setLoading(false);
     }
@@ -70,19 +64,24 @@ const AdminDashboardPanel = () => {
   };
 
   // Moderation: Delete an Event
-  const handleDeleteEvent = async (eventId) => {
-    if (!window.confirm("Are you sure you want to permanently delete this event? This action cannot be undone.")) {
-      return;
-    }
-    
-    try {
-      await axiosInstance.delete(`/events/${eventId}`);
-      triggerSuccess("Event deleted successfully.");
-      setEvents((prev) => prev.filter((ev) => ev._id !== eventId));
-      setMetrics((prev) => ({ ...prev, events: prev.events - 1 }));
-    } catch (err) {
-      setError(err.response?.data?.msg || err.response?.data?.message || "Failed to delete event.");
-    }
+  const handleDeleteEvent = async (eventId, eventTitle) => {
+    toast("Delete this event?", {
+      description: `"${eventTitle}" will be permanently removed.`,
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await axiosInstance.delete(`/events/${eventId}`);
+            toast.success("Event deleted successfully.");
+            setEvents((prev) => prev.filter((ev) => ev._id !== eventId));
+            setMetrics((prev) => ({ ...prev, events: prev.events - 1 }));
+          } catch (err) {
+            toast.error(err.response?.data?.msg || "Failed to delete event.");
+          }
+        },
+      },
+      cancel: { label: "Cancel" },
+    });
   };
 
   // Categories: Add Category
@@ -95,9 +94,9 @@ const AdminDashboardPanel = () => {
       const response = await axiosInstance.post("/categories", newCat);
       setCategories((prev) => [...prev, response.data].sort((a,b) => a.name.localeCompare(b.name)));
       setNewCat({ name: "", description: "", icon: "Tag" });
-      triggerSuccess(`Category "${response.data.name}" created successfully.`);
+      toast.success(`Category "${response.data.name}" created successfully.`);
     } catch (err) {
-      setError(err.response?.data?.msg || err.response?.data?.message || "Failed to create category.");
+      toast.error(err.response?.data?.msg || err.response?.data?.message || "Failed to create category.");
     } finally {
       setCreateLoading(false);
     }
@@ -105,17 +104,22 @@ const AdminDashboardPanel = () => {
 
   // Categories: Delete Category
   const handleDeleteCategory = async (catId, catName) => {
-    if (!window.confirm(`Are you sure you want to delete category "${catName}"?`)) {
-      return;
-    }
-
-    try {
-      await axiosInstance.delete(`/categories/${catId}`);
-      triggerSuccess(`Category "${catName}" deleted successfully.`);
-      setCategories((prev) => prev.filter((cat) => cat._id !== catId));
-    } catch (err) {
-      setError(err.response?.data?.msg || err.response?.data?.message || "Failed to delete category.");
-    }
+    toast(`Delete category "${catName}"?`, {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await axiosInstance.delete(`/categories/${catId}`);
+            toast.success(`Category "${catName}" deleted successfully.`);
+            setCategories((prev) => prev.filter((cat) => cat._id !== catId));
+          } catch (err) {
+            toast.error(err.response?.data?.msg || "Failed to delete category.");
+          }
+        },
+      },
+      cancel: { label: "Cancel" },
+    });
   };
 
   if (loading) {
@@ -270,7 +274,7 @@ const AdminDashboardPanel = () => {
                           </td>
                           <td className="py-4 px-6 text-center">
                             <button
-                              onClick={() => handleDeleteEvent(ev._id)}
+                              onClick={() => handleDeleteEvent(ev._id, ev.title)}
                               className="h-8 w-8 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive hover:text-white flex items-center justify-center transition-all cursor-pointer mx-auto"
                               title="Delete Event"
                             >
