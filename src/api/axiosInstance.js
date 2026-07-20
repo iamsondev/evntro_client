@@ -1,7 +1,20 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  // Try to check if we are running in the browser and not on localhost
+  if (typeof window !== 'undefined' && 
+      !window.location.hostname.includes('localhost') && 
+      !window.location.hostname.includes('127.0.0.1')) {
+    return 'https://envtro-server.onrender.com/api/v1';
+  }
+  return 'http://localhost:5000/api/v1';
+};
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
