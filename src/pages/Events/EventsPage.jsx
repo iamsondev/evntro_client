@@ -13,6 +13,7 @@ import {
   Layers,
   Sparkles,
   ChevronRight,
+  AlertCircle,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -20,16 +21,7 @@ const CATEGORIES = [
   "Festival","Sports","Webinar","Hackathon","Exhibition","Charity","Other",
 ];
 
-const MOCK_EVENTS = [
-  { _id:"m1", title:"Global Tech Summit 2026", description:"Experience the next frontier of tech, AI, cloud computing, and advanced agentic architectures. Network with builders worldwide.", category:"Conference", date:"2026-08-15T09:00:00.000Z", location:"BICC, Dhaka", capacity:500, banner:"https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200" },
-  { _id:"m2", title:"Vite + Tailwind V4 Developer BootCamp", description:"Hands-on coding workshop exploring modern front-end tech stacks, high-performance UI systems, and responsive design systems.", category:"Workshop", date:"2026-08-22T10:00:00.000Z", location:"Gulshan, Dhaka", capacity:80, banner:"https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1200" },
-  { _id:"m3", title:"Music Fest: Unplugged Symphony", description:"A magical night of live acoustic music and spectacular performances under the stars with popular national artists.", category:"Concert", date:"2026-09-05T18:00:00.000Z", location:"Army Stadium, Dhaka", capacity:2000, banner:"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200" },
-  { _id:"m4", title:"National Hackathon 2026", description:"36 hours of continuous building, brainstorming, and pitching. Create real-world solutions for community challenges.", category:"Hackathon", date:"2026-09-18T08:00:00.000Z", location:"MIST, Dhaka", capacity:350, banner:"https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200" },
-  { _id:"m5", title:"Charity for Flood Relief", description:"A networking seminar and auction event to raise charity funds for flood-affected regions.", category:"Charity", date:"2026-10-02T15:00:00.000Z", location:"Dhanmondi Club, Dhaka", capacity:150, banner:"https://images.unsplash.com/photo-1469571486040-7a308409417d?q=80&w=1200" },
-  { _id:"m6", title:"E-Commerce & Digital Retail Expo", description:"Meet industry innovators, checkout modern products, and discover marketing strategies in the digital retail landscape.", category:"Exhibition", date:"2026-10-15T11:00:00.000Z", location:"Jamuna Future Park, Dhaka", capacity:1000, banner:"https://images.unsplash.com/photo-1472851294608-062f824d296e?q=80&w=1200" },
-  { _id:"m7", title:"AI Webinar: Future of Automation", description:"Join world-class speakers for an insightful 3-hour webinar exploring AI automation and its impact on global industries.", category:"Webinar", date:"2026-10-28T09:00:00.000Z", location:"Online / Virtual", capacity:5000, banner:"https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200" },
-  { _id:"m8", title:"Sports Day Extravaganza", description:"A thrilling day of competitive sporting events, team challenges, and community wellness activities for all age groups.", category:"Sports", date:"2026-11-05T07:00:00.000Z", location:"Bashundhara Sports Complex, Dhaka", capacity:800, banner:"https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200" },
-];
+
 
 const formatDate = (d) => new Date(d).toLocaleDateString("en-US", { year:"numeric", month:"short", day:"numeric" });
 const formatTime = (d) => new Date(d).toLocaleTimeString("en-US", { hour:"2-digit", minute:"2-digit" });
@@ -145,6 +137,7 @@ const EventsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalEvents, setTotalEvents] = useState(0);
@@ -181,6 +174,7 @@ const EventsPage = () => {
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const params = { page: currentPage, limit: 9 };
       if (search) params.search = search;
@@ -191,24 +185,20 @@ const EventsPage = () => {
       const data = res.data;
 
       if (Array.isArray(data?.events)) {
-        if (data.events.length === 0 && !search && !category && !location) {
-          setEvents(MOCK_EVENTS);
-          setTotalPages(1);
-          setTotalEvents(MOCK_EVENTS.length);
-        } else {
-          setEvents(data.events);
-          setTotalPages(data.totalPages || 1);
-          setTotalEvents(data.totalEvents || data.events.length);
-        }
+        setEvents(data.events);
+        setTotalPages(data.totalPages || 1);
+        setTotalEvents(data.totalEvents || data.events.length);
+      } else {
+        setEvents([]);
+        setTotalPages(1);
+        setTotalEvents(0);
       }
-    } catch {
-      let filtered = [...MOCK_EVENTS];
-      if (search) filtered = filtered.filter(e => e.title.toLowerCase().includes(search.toLowerCase()) || e.description.toLowerCase().includes(search.toLowerCase()));
-      if (category) filtered = filtered.filter(e => e.category === category);
-      if (location) filtered = filtered.filter(e => e.location.toLowerCase().includes(location.toLowerCase()));
-      setEvents(filtered);
+    } catch (err) {
+      console.error("Failed to load events:", err);
+      setError("Failed to load events. Please try again later.");
+      setEvents([]);
       setTotalPages(1);
-      setTotalEvents(filtered.length);
+      setTotalEvents(0);
     } finally {
       setLoading(false);
     }
@@ -301,6 +291,18 @@ const EventsPage = () => {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(9)].map((_, i) => <SkeletonCard key={i} />)}
+          </div>
+        ) : error ? (
+          <div className="border border-dashed border-destructive/50 rounded-3xl p-16 text-center max-w-lg mx-auto my-12 bg-destructive/5">
+            <AlertCircle className="mx-auto h-12 w-12 text-destructive mb-4" />
+            <h3 className="text-lg font-bold text-foreground mb-2">Error Loading Events</h3>
+            <p className="text-sm text-muted-foreground mb-6">{error}</p>
+            <button
+              onClick={fetchEvents}
+              className="px-6 py-2.5 bg-primary text-primary-foreground font-semibold text-sm rounded-xl hover:bg-primary/95 transition-all cursor-pointer"
+            >
+              Try Again
+            </button>
           </div>
         ) : events.length === 0 ? (
           <div className="border border-dashed border-border rounded-3xl p-16 text-center max-w-lg mx-auto my-12">

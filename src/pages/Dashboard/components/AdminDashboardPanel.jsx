@@ -55,11 +55,7 @@ const AdminDashboardPanel = () => {
     fetchAdminData();
   }, []);
 
-  // Show a temporary success message
-  const triggerSuccess = (msg) => {
-    setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(null), 4000);
-  };
+
 
   // Moderation: Delete an Event
   const handleDeleteEvent = async (eventId, eventTitle) => {

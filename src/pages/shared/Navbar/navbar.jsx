@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo/Logo";
 import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/AuthContext";
+import NotificationBell from "@/components/NotificationBell";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
@@ -82,6 +83,7 @@ const Navbar = () => {
             </Link>
           )}
 
+          {user && <NotificationBell />}
           <ThemeToggle />
           <div className="h-4 w-px bg-border mx-1" />
 
@@ -171,6 +173,7 @@ const Navbar = () => {
 
         {/* Mobile right side */}
         <div className="flex items-center gap-2 md:hidden">
+          {user && <NotificationBell />}
           <ThemeToggle />
           <button
             type="button"

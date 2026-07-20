@@ -56,9 +56,9 @@ const PaymentSuccessPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
-        <h2 className="text-xl font-bold text-foreground">Verifying Payment...</h2>
-        <p className="text-sm text-muted-foreground">
+        <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
+        <h2 className="text-lg sm:text-xl font-bold text-foreground">Verifying Payment...</h2>
+        <p className="text-sm text-muted-foreground max-w-xs sm:max-w-none">
           Please wait while we confirm your registration status with Stripe. Do not reload or close this page.
         </p>
       </div>
@@ -68,13 +68,13 @@ const PaymentSuccessPage = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-card border border-border/80 rounded-3xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="max-w-md w-full bg-card border border-border/80 rounded-3xl p-6 sm:p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.03),transparent_50%)]" />
           <div className="relative z-10 space-y-4">
-            <div className="h-16 w-16 mx-auto rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
-              <AlertTriangle className="h-8 w-8" />
+            <div className="h-14 w-14 sm:h-16 sm:w-16 mx-auto rounded-full bg-destructive/10 flex items-center justify-center text-destructive">
+              <AlertTriangle className="h-7 w-7 sm:h-8 sm:w-8" />
             </div>
-            <h1 className="text-2xl font-extrabold text-foreground tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
               Verification Issue
             </h1>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -103,34 +103,34 @@ const PaymentSuccessPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-8">
-      <div className="max-w-xl w-full bg-card border border-border/80 rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden transition-all duration-500 hover:shadow-primary/5">
+      <div className="max-w-xl w-full bg-card border border-border/80 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden transition-all duration-500 hover:shadow-primary/5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(47,62,168,0.05),transparent_50%)]" />
-        
-        <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+
+        <div className="relative z-10 flex flex-col items-center text-center space-y-5 sm:space-y-6">
           {/* Animated pulsing success checkmark */}
           <div className="relative">
             <div className="absolute inset-0 rounded-full bg-green-500/20 blur-md animate-ping" />
-            <div className="h-20 w-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-500 relative z-10 shadow-inner">
-              <CheckCircle2 className="h-10 w-10 animate-bounce" />
+            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-500 relative z-10 shadow-inner">
+              <CheckCircle2 className="h-8 w-8 sm:h-10 sm:w-10 animate-bounce" />
             </div>
           </div>
 
           <div className="space-y-2">
-            <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-tight">
               Registration Confirmed! 🎉
             </h1>
-            <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+            <p className="text-sm text-muted-foreground max-w-xs sm:max-w-sm mx-auto">
               Your payment has been successfully processed, and your slot is reserved.
             </p>
           </div>
 
           {/* Event Details Card */}
           {eventDetails && (
-            <div className="w-full bg-background/50 border border-border/60 rounded-2xl p-5 text-left space-y-4">
-              <div className="flex gap-4 items-start">
+            <div className="w-full bg-background/50 border border-border/60 rounded-2xl p-4 sm:p-5 text-left space-y-4">
+              <div className="flex gap-3 sm:gap-4 items-start">
                 <img
                   src={eventDetails.banner || "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=200"}
-                  className="h-16 w-24 object-cover rounded-xl shrink-0 bg-muted border border-border/20"
+                  className="h-14 w-20 sm:h-16 sm:w-24 object-cover rounded-xl shrink-0 bg-muted border border-border/20"
                   alt={eventDetails.title}
                   onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=200"; }}
                 />
@@ -142,12 +142,13 @@ const PaymentSuccessPage = () => {
                     {eventDetails.title}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                    <MapPin className="h-3 w-3 text-accent shrink-0" /> {eventDetails.location}
+                    <MapPin className="h-3 w-3 text-accent shrink-0" />
+                    <span className="truncate">{eventDetails.location}</span>
                   </p>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-border/40 flex flex-col sm:flex-row justify-between gap-2.5 text-xs text-muted-foreground">
+              <div className="pt-3 border-t border-border/40 flex flex-col sm:flex-row sm:justify-between gap-2.5 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1.5 font-medium">
                   <Calendar className="h-4 w-4 text-accent shrink-0" />
                   {formatDate(eventDetails.date)}
@@ -161,8 +162,8 @@ const PaymentSuccessPage = () => {
           )}
 
           {/* Confirmation Message */}
-          <div className="bg-primary/5 border border-primary/10 rounded-2xl px-5 py-4 text-xs sm:text-sm text-foreground/80 flex items-center gap-3 text-left w-full">
-            <span className="relative flex h-2 w-2 shrink-0">
+          <div className="bg-primary/5 border border-primary/10 rounded-2xl px-4 sm:px-5 py-4 text-xs sm:text-sm text-foreground/80 flex items-start sm:items-center gap-3 text-left w-full">
+            <span className="relative flex h-2 w-2 shrink-0 mt-1 sm:mt-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
