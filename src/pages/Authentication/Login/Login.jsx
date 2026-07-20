@@ -33,6 +33,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -47,6 +48,11 @@ const Login = () => {
     if (response.success) {
       navigate("/dashboard");
     }
+  };
+
+  const handleDemoLogin = (email, password) => {
+    setValue("email", email);
+    setValue("password", password);
   };
 
   return (
@@ -213,6 +219,36 @@ const Login = () => {
             size="large"
             width="100%"
           />
+        </div>
+      </div>
+
+      {/* Demo Credentials */}
+      <div className="mt-6 border-t border-border/60 pt-5">
+        <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest text-center mb-3">
+          Quick Demo Access
+        </p>
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => handleDemoLogin("admin@envtro.com", "admin123")}
+            className="px-2.5 py-1.5 bg-destructive/10 hover:bg-destructive/20 border border-destructive/20 rounded-xl text-[11px] font-bold text-destructive transition-all cursor-pointer text-center"
+          >
+            Admin
+          </button>
+          <button
+            type="button"
+            onClick={() => handleDemoLogin("organizer@gmail.com", "123456789")}
+            className="px-2.5 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 rounded-xl text-[11px] font-bold text-indigo-500 transition-all cursor-pointer text-center"
+          >
+            Organizer
+          </button>
+          <button
+            type="button"
+            onClick={() => handleDemoLogin("attendee@gmail.com", "123456789")}
+            className="px-2.5 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-xl text-[11px] font-bold text-emerald-500 transition-all cursor-pointer text-center"
+          >
+            Attendee
+          </button>
         </div>
       </div>
 

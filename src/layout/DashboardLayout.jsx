@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
+import Logo from "@/components/Logo/Logo";
 import {
   LayoutDashboard,
   Calendar,
@@ -84,13 +85,8 @@ const DashboardLayout = () => {
         {/* Sidebar Header */}
         <div>
           <div className="h-20 px-6 border-b border-border/60 flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-md shadow-primary/20">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
-              <span className="font-extrabold text-2xl tracking-tight text-foreground group-hover:text-primary transition-colors">
-                Evntro
-              </span>
+            <Link to="/" className="flex items-center gap-2 shrink-0">
+              <Logo />
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
